@@ -1,0 +1,13 @@
+# ==[ Project Name: for example now it should be "Ginkgo-P" ]==========|
+[Ginkgo-P]
+
+# ==[ All resolved the Bugs in the commit will be listed in here ]=====|
+# ==[ Separate Bugs with comma ]=======================================|
+[Bug] 
+# ==[ The solution that resolved bug,need a space before description ]=|
+[Solution] 
+# ==[ Refer to new feature's description or find issue by ourselves ]==|
+# ==[ Need a space before feature list ]===============================|
+[Feature] 1.
+          2.
+

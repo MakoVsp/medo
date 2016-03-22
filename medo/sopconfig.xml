@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sopconfig syberos:versionCode="1" syberos:shareUserId="" syberos:versionName="1.0.0" xmlns:syberos="http://schemas.syberos.com/sop/res/syberos/v1" syberos:sopid="com.syberos.medo">
+    <uses-permission syberos:name="syberos.permission.RECORD"/>
+    <uses-permission syberos:name="syberos.permission.ACCESS_WAKELOCK"/>
+
+    <uses-sdk syberos:targetSdkVersion="" syberos:minSdkVersion=""/>
+    <application syberos:description="Brief introduction of your application here. " syberos:debuggable="true" syberos:name="medo" syberos:icon="res/medo.png">
+        <uiapp syberos:background="" syberos:launcher="true" syberos:exec="bin/medo" syberos:id="medo" syberos:name="" syberos:icon="res/medo.png" syberos:splash="">
+            <doctype syberos:id=""/>
+        </uiapp>
+    </application>
+</sopconfig>

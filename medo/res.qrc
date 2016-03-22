@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/CMedoDropListView.qml</file>
+        <file>images/edit.png</file>
+        <file>qml/CMedoEditPage.qml</file>
+        <file>fonts/DroidSansFallback.ttf</file>
+        <file>images/play.png</file>
+        <file>images/start.png</file>
+        <file>images/stop.png</file>
+    </qresource>
+</RCC>
