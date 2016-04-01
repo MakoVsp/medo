@@ -8,16 +8,22 @@
 #define DB_PATH "/data/data/com.syberos.medo/data/medo.db"
 #define TABLE_NAME "medo"
 #define SEARCH_TABLE "SELECT * from sqlite_master where type = 'table'"
-#define CREATE_TABLE "CREATE TABLE IF NOT EXISTS %1 (id INTEGER primary key, content TEXT, attachment TEXT, date TEXT)"
-#define INSERT_RECORD "INSERT INTO '%s' ('content', 'attachment', 'date') VALUES('%s','%s','%s')"
+#define CREATE_TABLE "CREATE TABLE IF NOT EXISTS %1 (id TEXT primary key NOT NULL UNIQUE, content TEXT, attachment TEXT, date TEXT)"
+#define INSERT_RECORD "INSERT INTO '%s' ('id','content', 'attachment', 'date') VALUES('%s','%s','%s','%s')"
 #define ORDER_RECORD "SELECT * FROM '%s' ORDER BY date desc, id desc"
-#define UPDATE_RECORD "UPDATE '%s' SET 'content'='%s', 'attachment'='%s', 'date'='%s' WHERE id = %d"
+#define UPDATE_RECORD "UPDATE '%s' SET 'content'='%s', 'attachment'='%s', 'date'='%s' WHERE id = '%s'"
+
+#define TABLE_ATTACHMENT  "attachment"
+#define CREATE_ATTACHMENT  "CREATE TABLE IF NOT EXISTS %1 (parentId TEXT  NOT NULL, path TEXT, name TEXT)"
+#define INSERT_ATTACHEMNT "INSERT INTO '%s' ('parentId', 'path', 'name') VALUES('%s','%s','%s')"
+#define SEARCH_ATTACHMENT "SELECT * from '%s' where parentId = '%s'"
 
 
 CMedoDbManager* CMedoDbManager::m_pInstance = 0;
 
 void CMedoDbManager::createMedoDbManager()
 {
+
     qDebug() << Q_FUNC_INFO;
     if (!m_pInstance) {
         m_pInstance = new CMedoDbManager();
@@ -57,7 +63,8 @@ DBRecordList CMedoDbManager::getRecordList()
     return oList;
 }
 
-void CMedoDbManager::addRecord(QString content,
+void CMedoDbManager::addRecord(const QString &id,
+                               QString content,
                                const QString &attachment,
                                const QString &date)
 {
@@ -68,7 +75,7 @@ void CMedoDbManager::addRecord(QString content,
         qDebug() << "Input content contains ', so convert it-------------";
         content.replace("'", "''");
     }
-    sStr.sprintf(INSERT_RECORD, TABLE_NAME,
+    sStr.sprintf(INSERT_RECORD, TABLE_NAME,id.toLocal8Bit().data(),
                 content.toLocal8Bit().data(),
                 attachment.toUtf8().data(),
                 date.toLocal8Bit().data());
@@ -93,13 +100,59 @@ void CMedoDbManager::updateRecord(const QString &id,
                 content.toLocal8Bit().data(),
                 attachment.toLocal8Bit().data(),
                 date.toLocal8Bit().data(),
-                id.toInt());
+                id.toLocal8Bit().data());
     qDebug() << "sStr = " << sStr;
 
     if (!m_pQuery->exec(sStr)) {
         qDebug()<<"updateRecord() failed!!!!!!!!!!!!!" << m_pQuery->lastError().text();
     }
 }
+
+void CMedoDbManager::addAttachment(const QString &parentId,
+                   const QString &path,
+                   QString name)
+{
+    qDebug() << "CMedoDbManager::addAttachment==========" <<  parentId <<"---" << path << "---" << name;
+    QString sStr;
+
+    if(name.indexOf("'") >= 0) {
+        qDebug() << "Input content contains ', so convert it-------------";
+        name.replace("'", "''");
+    }
+    sStr.sprintf(INSERT_ATTACHEMNT, TABLE_ATTACHMENT,
+                parentId.toUtf8().data(),
+                path.toUtf8().data(),
+                name.toUtf8().data());
+    qDebug() << "sStr = " << sStr;
+    if (!m_pQuery->exec(sStr)) {
+        qDebug()<<"addAttachment() failed!!!!!!!!!!!!!" << m_pQuery->lastError().text();
+    }
+}
+
+DBAttachmentList CMedoDbManager::getAttachments(const QString &parentId)
+{
+    qDebug() << "CMedoDbManager::getAttachments-=======" << parentId;
+    DBAttachmentList oList;
+    QString sStr;
+    sStr.sprintf(SEARCH_ATTACHMENT, TABLE_ATTACHMENT,parentId.toUtf8().data());
+    qDebug() << "CMedoDbManager::getAttachments-=======str" << sStr;
+
+    if (m_pQuery->exec(sStr)) {
+        while (m_pQuery->next()) {
+            DBAttachment attachment;
+            attachment.parentId = QString::fromUtf8(m_pQuery->value("parentId").toByteArray());
+            attachment.path = QString::fromUtf8(m_pQuery->value("path").toByteArray());
+            attachment.name = QString::fromUtf8(m_pQuery->value("name").toByteArray());
+            oList.append(attachment);
+        }
+    } else {
+        qDebug() << m_pQuery->lastError().text();
+    }
+
+    qDebug() << Q_FUNC_INFO << "oList.size = " << oList.size();
+    return oList;
+}
+
 
 CMedoDbManager::CMedoDbManager(QObject *parent) :
     QObject(parent)
@@ -175,6 +228,15 @@ CMedoDbManager::CMedoDbManager(QObject *parent) :
             m_oTables << TABLE_NAME;
         } else {
             qDebug() << QString("FAIL can't create table %1 !!!").arg(TABLE_NAME) << m_pQuery->lastError().text();
+        }
+    }
+
+    if(!m_oTables.contains(TABLE_ATTACHMENT))
+    {
+        if (m_pQuery->exec(QString(CREATE_ATTACHMENT).arg(TABLE_ATTACHMENT))) {
+            m_oTables << TABLE_ATTACHMENT;
+        } else {
+            qDebug() << QString("FAIL can't create table %1 !!!").arg(TABLE_ATTACHMENT) << m_pQuery->lastError().text();
         }
     }
 }

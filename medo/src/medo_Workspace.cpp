@@ -4,10 +4,12 @@
 
 #include <QDebug>
 #include <QQmlContext>
+#include "cmedolistmodel.h"
 
 medo_Workspace::medo_Workspace()
     : CWorkspace()
 {
+    qmlRegisterType<CMedoListModel>("CMedoListModel", 1, 0, "CMedoListModel");
     m_pMedoRecordManager = QSharedPointer<CMedoRecordManager>(new CMedoRecordManager());
     if (m_pMedoRecordManager.data()) {
         m_pMedoRecordManager.data()->initModel();

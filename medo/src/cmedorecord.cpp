@@ -1,4 +1,6 @@
 #include "cmedorecord.h"
+#include "cmedolistmodel.h"
+#include "attachment.h"
 
 CMedoRecord::CMedoRecord(const QString &id,
                          const QString &content,
@@ -9,9 +11,10 @@ CMedoRecord::CMedoRecord(const QString &id,
     m_sId(id),
     m_sContent(content),
     m_sAttachment(attachment),
-    m_sDate(date)
+    m_sDate(date),
+    m_attList(0)
 {
-
+    m_attList = new CMedoListModel(this);
 }
 
 QString CMedoRecord::id() const
@@ -73,5 +76,21 @@ QString CMedoRecord::setDate(const QString &date)
     emit dateChanged();
     return date;
 }
+
+CMedoListModel* CMedoRecord::attachmentList()
+{
+    return m_attList;
+}
+
+void CMedoRecord::addAttachment(const QString &parentId,
+                                const QString &path,
+                                const QString &name)
+{
+    Attachment *att = new Attachment(parentId,path,name,this);
+    m_attList->addItem(att);
+    emit attachmentListChanged();
+}
+
+
 
 

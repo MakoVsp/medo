@@ -20,7 +20,7 @@ CPageStackWindow {
         //            }
         //        }
 
-        function showEditPage(openType, text, lastEditTime, recordId, attPath) {
+        function showEditPage(openType, text, lastEditTime, recordId, attPath,attList) {
             var component = pageStack.getCachedPage(Qt.resolvedUrl("CMedoEditPage.qml"),"CMedoEditPage");
 
             component.openType = openType
@@ -28,12 +28,14 @@ CPageStackWindow {
             component.lastEditTime = lastEditTime
             component.recordId = recordId
             component.attPath = attPath
+            component.attList = attList
 
             console.log("showEditPage :: openType = ", component.openType)
             console.log("showEditPage :: textContent = ", component.textContent)
             console.log("showEditPage :: lastEditTime = ", component.lastEditTime)
             console.log("showEditPage :: recordId = ", component.recordId)
             console.log("showEditPage :: attPath = ", component.attPath)
+            console.log("showEditPage :: attPathlist = ", component.attList)
 
             pageStack.push(component);
         }

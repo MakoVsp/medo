@@ -22,6 +22,13 @@ CMedoRecordManager::CMedoRecordManager(QObject *parent) :
     connect(m_pThreadObj,SIGNAL(sendRecord(const QString &,const QString &,const QString &,const QString &)),
             this,SLOT(addRecordToModel(const QString &,const QString &,const QString &,const QString &)));
 
+    connect(m_pThreadObj,SIGNAL(sendAttachment(const QString &,const QString &,const QString &)),
+            this,SLOT(addAttachmentToRecord(const QString &,const QString &,const QString &)));
+
+    connect(this,SIGNAL(startQueryAttachments(const QString &)),m_pThreadObj,SLOT(queryAttachments(const QString &)));
+
+
+
     m_oThread.start();
 
     createPath(ATTACHMENT_PATH);
@@ -48,12 +55,13 @@ QString CMedoRecordManager::currentTime()
     return QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm");
 }
 
-void CMedoRecordManager::newRecord(const QString &content,
+void CMedoRecordManager::newRecord(const QString &id,
+                                   const QString &content,
                                    const QString &attachment,
                                    const QString &date)
 {
     qDebug() << Q_FUNC_INFO;
-    QString sNewRecordId = QString::number(_list->count() + 1);
+    //QString sNewRecordId = QString::number(_list->count() + 1);
 
     QString sAttachment;
     if (attachment.isEmpty()) {
@@ -62,9 +70,9 @@ void CMedoRecordManager::newRecord(const QString &content,
         sAttachment = attachment;
     }
 
-    CMedoDbManager::instance()->addRecord(content, sAttachment, date);
+    CMedoDbManager::instance()->addRecord(id,content, sAttachment, date);
 
-    CMedoRecord *pRecord = new CMedoRecord(sNewRecordId,
+    CMedoRecord *pRecord = new CMedoRecord(id,
                                            content,
                                            sAttachment,
                                            date,
@@ -88,6 +96,9 @@ void CMedoRecordManager::updateRecord(const QString &id,
         m_oMap[id]->setDate(date);
 
         move(indexOf(m_oMap[id]), 0);
+
+        m_oMap[id]->attachmentList()->reset();
+        emit startQueryAttachments(id);
     }
 }
 
@@ -98,13 +109,15 @@ QString CMedoRecordManager::getNewAttPath()
     return sPath;
 }
 
-void CMedoRecordManager::startRecorder(const QString &path)
+void CMedoRecordManager::startRecorder(const QString &parentId,const QString &path)
 {
-    qDebug() << Q_FUNC_INFO << path;
+    qDebug() << Q_FUNC_INFO <<parentId <<  path;
     createPath(path);
     m_sCurentAttFullName = getAttName(path);
     qDebug() << "startRecorder m_sCurentAttFullName = " << m_sCurentAttFullName;
     emit sendStartRecorderToThread(m_sCurentAttFullName);
+    CMedoDbManager::instance()->addAttachment(parentId,path,m_sCurentAttFullName);
+
 }
 
 void CMedoRecordManager::stopRecorder()
@@ -149,6 +162,15 @@ void CMedoRecordManager::addRecordToModel(const QString &id,
                                                this);
         addItem(pRecord);
         m_oMap[pRecord->id()] = pRecord;
+    }
+}
+
+void CMedoRecordManager::addAttachmentToRecord(const QString &parentId,
+                          const QString &path,
+                          const QString &name)
+{
+    if (m_oMap.contains(parentId)) {
+        m_oMap[parentId]->addAttachment(parentId,path,name);
     }
 }
 

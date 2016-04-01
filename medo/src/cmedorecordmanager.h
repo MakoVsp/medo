@@ -20,7 +20,8 @@ public:
 
     Q_INVOKABLE QString currentTime();
 
-    Q_INVOKABLE void newRecord(const QString &content,
+    Q_INVOKABLE void newRecord(const QString &id,
+                               const QString &content,
                                const QString &attachment,
                                const QString &date);
 
@@ -31,7 +32,7 @@ public:
 
     Q_INVOKABLE QString getNewAttPath();
 
-    Q_INVOKABLE void startRecorder(const QString &path);
+    Q_INVOKABLE void startRecorder(const QString &parentId,const QString &path);
 
     Q_INVOKABLE void stopRecorder();
 
@@ -44,12 +45,17 @@ public:
 signals:
     void sendInitModelToThread();
     void sendStartRecorderToThread(const QString &path);
+    void startQueryAttachments(const QString &parentId);
 
 public slots:
     void addRecordToModel(const QString &id,
                           const QString &content,
                           const QString &attachment,
                           const QString &date);
+
+    void addAttachmentToRecord(const QString &parentId,
+                              const QString &path,
+                              const QString &name);
 
 private:
     void createPath(const QString &path);

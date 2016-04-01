@@ -38,7 +38,7 @@ ListView {
                     medoAttManager.updateAttModel(model.modelData.attachment)
                     rootPage.showEditPage("OPEN_EDIT", model.modelData.content,
                                           model.modelData.date, model.modelData.id,
-                                          model.modelData.attachment)
+                                          model.modelData.attachment,model.modelData.attachmentList)
                 }
 
                 onReleased: {
@@ -160,6 +160,10 @@ ListView {
 
                     onEntered: visualModel.items.move(drag.source.visualIndex, rootItem.visualIndex)
                 }
+            }
+
+            Component.onCompleted: {
+                medoRecordManager.startQueryAttachments(model.modelData.id);
             }
         }
     }

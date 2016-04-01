@@ -14,8 +14,16 @@ struct DBRecord {
     QString date;
 };
 Q_DECLARE_METATYPE(DBRecord)
-
 typedef QList<DBRecord> DBRecordList;
+
+struct DBAttachment{
+    QString parentId;
+    QString path;
+    QString name;
+};
+Q_DECLARE_METATYPE(DBAttachment)
+typedef QList<DBAttachment> DBAttachmentList;
+
 
 class CMedoDbManager : public QObject
 {
@@ -27,7 +35,8 @@ public:
 
     DBRecordList getRecordList();
 
-    void addRecord(QString content,
+    void addRecord(const QString &id,
+                   QString content,
                    const QString &attachment,
                    const QString &date);
 
@@ -35,6 +44,13 @@ public:
                       QString content,
                       const QString &attachment,
                       const QString &date);
+
+    void addAttachment(const QString &parentId,
+                       const QString &path,
+                       QString name);
+
+    DBAttachmentList getAttachments(const QString &parentId);
+
 
 public:
     static CMedoDbManager* m_pInstance;

@@ -22,3 +22,11 @@ void CMedoRecordThread::doStartRecorder(const QString &path)
     qDebug() << Q_FUNC_INFO << path;
     CMedoAttManager::instance()->startRecorder(path);
 }
+
+void CMedoRecordThread::queryAttachments(const QString &parentId)
+{
+    DBAttachmentList oList = CMedoDbManager::instance()->getAttachments(parentId);
+    for (int i = 0; i < oList.size(); ++i) {
+        emit sendAttachment(oList.at(i).parentId, oList.at(i).path, oList.at(i).name);
+    }
+}

@@ -15,6 +15,7 @@ CPage {
     property string recordId: ""
     property bool recording: false
     property string attPath: ""
+    property var attList: null
 
     FontLoader { id: localFont; source: "qrc:///fonts/DroidSansFallback.ttf" }
 
@@ -22,7 +23,12 @@ CPage {
        if (status === CPageStatus.Show) {
            if (root.openType === "OPEN_NEW" && root.textContent == "") {
                editArea.focus = true
+               root.recordId = new Date().toLocaleTimeString(Qt.locale(""));
+               console.log("new id=======================",root.recordId)
+           } else if(root.openType === "OPEN_EDIT" ) {
+
            }
+
        } else if (status === CPageStatus.WillShow) {
            // todo
            root.recording = false
@@ -63,15 +69,16 @@ CPage {
                     console.log("Edit Done!!!")
                     if (root.openType === "OPEN_EDIT") {
                         console.log("medo === OPEN_EDIT")
-                        medoRecordManager.updateRecord(root.recordId, editArea.text, "", medoRecordManager.currentTime())
+                        medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())
                     } else if (root.openType === "OPEN_NEW"){
                         console.log("medo === OPEN_NEW")
                         if (editArea.text !== "") {
-                            medoRecordManager.newRecord(editArea.text, root.attPath, medoRecordManager.currentTime())
+                            medoRecordManager.newRecord(root.recordId,editArea.text, root.attPath, medoRecordManager.currentTime())
                         }
                     }
                 } else {
                     console.log("Not Edit !!!")
+                    medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())//only update voice
                 }
 
                 pageStack.pop();
@@ -110,7 +117,7 @@ CPage {
 
             width: parent.width
             height: 130
-            anchors.bottom: parent.bottom
+            anchors.bottom: attachementList.top //parent.bottom
             anchors.left: parent.left
             anchors.right: parent.right
 //            color: "salmon"
@@ -137,19 +144,72 @@ CPage {
                 asynchronous : false
                 source: root.recording ? "qrc:/images/stop.png" : "qrc:/images/start.png"
 
+
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        console.log("onClicked recordBtn !!!")
+                        console.log("onClicked recordBtn !!!--text",editArea.text)
+                        if(editArea.text === "")
+                            return;
+
                         root.recording = !root.recording
+                        console.log("onClicked recordBtn !!!",root.recording)
                         if (root.recording) {
-                            medoRecordManager.startRecorder(root.attPath)
+                            medoRecordManager.startRecorder(root.recordId,root.attPath)
                             gScreenInfo.setWindowProperty("SCREEN_ALWAYS_ON",true)
                         } else {
                             medoAttManager.stopRecorder()
                             gScreenInfo.setWindowProperty("SCREEN_ALWAYS_ON",false)
                         }
                     }
+                }
+            }
+            Image {
+                id: listImage
+                anchors.right: parent.right
+                anchors.rightMargin:40
+                anchors.verticalCenter: parent.verticalCenter
+                source: "qrc:/images/lists.png"
+                sourceSize: Qt.size(100, 100)
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        attachementList.visible = !attachementList.visible
+                    }
+                }
+            }
+        }
+        ListView{
+            id:attachementList
+            width: parent.width
+            height:visible ? parent.height/3 : 0
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            visible: false
+            model:root.attList
+            clip: true
+            Behavior on height {
+                NumberAnimation{duration: 100}
+            }
+
+            delegate:Rectangle{
+                width: attachementList.width
+                height:100
+                Text{
+                    anchors.left: parent.left
+                    anchors.leftMargin: 40
+                    anchors.verticalCenter: parent.verticalCenter
+                    text:model.modelData.name
+                    font.family: localFont.name
+                    font.pixelSize :gUiConst.getValue("font11")
+                    font.bold: true
+                    color:"#8F7A66"
+                }
+                Rectangle{
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    height:1
+                    color: "black"
                 }
             }
         }

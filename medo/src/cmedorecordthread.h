@@ -15,9 +15,14 @@ signals:
                     const QString &attachment,
                     const QString &date);
 
+    void sendAttachment(const QString &parentId,
+                    const QString &path,
+                    const QString &name);
+
 public slots:
     void doInitModel();
     void doStartRecorder(const QString &path);
+    void queryAttachments(const QString &parentId);
 
 };
 

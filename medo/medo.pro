@@ -40,7 +40,8 @@ SOURCES += src/main.cpp \
     src/cmedorecordmanager.cpp \
     src/cmedolistmodel.cpp \
     src/cmedorecordthread.cpp \
-    src/cmedoattmanager.cpp
+    src/cmedoattmanager.cpp \
+    src/attachment.cpp
 
 HEADERS += src/medo_Workspace.h \
     src/cmedodbmanager.h \
@@ -48,7 +49,8 @@ HEADERS += src/medo_Workspace.h \
     src/cmedorecordmanager.h \
     src/cmedolistmodel.h \
     src/cmedorecordthread.h \
-    src/cmedoattmanager.h
+    src/cmedoattmanager.h \
+    src/attachment.h
 
 # Installation path
 target.path = $$INS_DIR/bin

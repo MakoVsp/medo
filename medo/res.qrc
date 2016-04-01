@@ -8,5 +8,6 @@
         <file>images/play.png</file>
         <file>images/start.png</file>
         <file>images/stop.png</file>
+        <file>images/lists.png</file>
     </qresource>
 </RCC>
