@@ -48,6 +48,10 @@ public:
     void addAttachment(const QString &parentId,
                        const QString &path,
                        QString name);
+    void deleteAttachment(const QString &parentId,
+                                      const QString &path,
+                                      QString name);
+
 
     DBAttachmentList getAttachments(const QString &parentId);
 

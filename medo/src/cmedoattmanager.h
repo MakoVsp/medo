@@ -11,6 +11,8 @@
 #include <QAudioProbe>
 #include <QAudioBuffer>
 #include <QtCore/qmath.h>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 
 class CMedoAttManager : public CMedoListModel
 {
@@ -30,6 +32,7 @@ public:
     Q_INVOKABLE void cancelRecorder();
 
     Q_INVOKABLE void updateAttModel(const QString &path);
+    Q_INVOKABLE void play(const QString &path);
 
 signals:
     void durationChanged(qint64 duration);
@@ -63,6 +66,8 @@ private:
 private:
     QAudioRecorder *m_pAudioRecorder;
     QAudioProbe *m_pAudioProbe;
+    QMediaPlayer *m_pMediaPlayer;
+    QMediaPlaylist *m_pMediaPlayerList;
     CSystemPowerManager *m_pPowerManager;
 
     qint64 m_nDuration;

@@ -118,6 +118,9 @@ void CMedoRecordManager::startRecorder(const QString &parentId,const QString &pa
     emit sendStartRecorderToThread(m_sCurentAttFullName);
     CMedoDbManager::instance()->addAttachment(parentId,path,m_sCurentAttFullName);
 
+    if(m_oMap.contains(parentId)) {
+        m_oMap[parentId]->addAttachment(parentId,path,m_sCurentAttFullName);
+    }
 }
 
 void CMedoRecordManager::stopRecorder()
@@ -172,6 +175,13 @@ void CMedoRecordManager::addAttachmentToRecord(const QString &parentId,
     if (m_oMap.contains(parentId)) {
         m_oMap[parentId]->addAttachment(parentId,path,name);
     }
+}
+
+void CMedoRecordManager::deleteAttachment(const QString &parentId,
+                                      const QString &path,
+                                      QString name)
+{
+    CMedoDbManager::instance()->deleteAttachment(parentId,path,name);
 }
 
 void CMedoRecordManager::createPath(const QString &path)

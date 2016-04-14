@@ -17,6 +17,7 @@
 #define CREATE_ATTACHMENT  "CREATE TABLE IF NOT EXISTS %1 (parentId TEXT  NOT NULL, path TEXT, name TEXT)"
 #define INSERT_ATTACHEMNT "INSERT INTO '%s' ('parentId', 'path', 'name') VALUES('%s','%s','%s')"
 #define SEARCH_ATTACHMENT "SELECT * from '%s' where parentId = '%s'"
+#define DELETE_ATTACHMENT "DELETE from '%s' where parentId = '%s' and path = '%s' and name = '%s'"
 
 
 CMedoDbManager* CMedoDbManager::m_pInstance = 0;
@@ -126,6 +127,28 @@ void CMedoDbManager::addAttachment(const QString &parentId,
     qDebug() << "sStr = " << sStr;
     if (!m_pQuery->exec(sStr)) {
         qDebug()<<"addAttachment() failed!!!!!!!!!!!!!" << m_pQuery->lastError().text();
+    }
+}
+
+void CMedoDbManager::deleteAttachment(const QString &parentId,
+                                  const QString &path,
+                                  QString name)
+{
+    qDebug() << "CMedoDbManager::deleteAttachment==========" <<  parentId <<"---" << path << "---" << name;
+    QString sStr;
+
+    if(name.indexOf("'") >= 0) {
+        qDebug() << "Input content contains ', so convert it-------------";
+        name.replace("'", "''");
+    }
+    name = path + "/" + name;
+    sStr.sprintf(DELETE_ATTACHMENT, TABLE_ATTACHMENT,
+                parentId.toUtf8().data(),
+                path.toUtf8().data(),
+                name.toUtf8().data());
+    qDebug() << "sStr = " << sStr;
+    if (!m_pQuery->exec(sStr)) {
+        qDebug()<<"deleteAttachment() failed!!!!!!!!!!!!!" << m_pQuery->lastError().text();
     }
 }
 

@@ -23,6 +23,14 @@ CMedoAttManager::CMedoAttManager(QObject *parent) :
 
     m_pAudioRecorder = new QAudioRecorder();
     m_pAudioProbe = new QAudioProbe();
+    m_pMediaPlayerList = new QMediaPlaylist;
+    m_pMediaPlayerList->setCurrentIndex(0);
+    m_pMediaPlayerList->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+
+    m_pMediaPlayer = new QMediaPlayer;
+    m_pMediaPlayer->setPlaylist(m_pMediaPlayerList);
+
+
     m_pPowerManager = new CSystemPowerManager();
 
     m_nDuration = 0;
@@ -100,6 +108,7 @@ void CMedoAttManager::stopRecorder()
 }
 
 void CMedoAttManager::cancelRecorder()
+
 {
     if(m_bRecorderState) {
         m_bStopRecorder = false;
@@ -141,6 +150,7 @@ void CMedoAttManager::stateChanged(QMediaRecorder::State state)
 {
     Q_UNUSED(state);
 }
+void play(const QString &path);
 
 void CMedoAttManager::statusChanged(QMediaRecorder::Status status)
 {
@@ -218,6 +228,13 @@ bool CMedoAttManager::setRecorderReady(const bool &recorderReady)
     m_bRecorderState = recorderReady;
     emit recorderReadyChanged();
     return recorderReady;
+}
+void CMedoAttManager::play(const QString &path)
+{
+    qDebug() << "CMedoAttManager::play =============" << path;
+    m_pMediaPlayerList->clear();
+    m_pMediaPlayerList->addMedia(QUrl::fromLocalFile(path));
+    m_pMediaPlayer->play();
 }
 
 // This function returns the maximum possible sample value for a given audio format

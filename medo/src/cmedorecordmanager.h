@@ -42,6 +42,10 @@ public:
 
     Q_INVOKABLE bool removeFile(const QString &name);
 
+    Q_INVOKABLE void deleteAttachment(const QString &parentId,
+                                      const QString &path,
+                                      QString name);
+
 signals:
     void sendInitModelToThread();
     void sendStartRecorderToThread(const QString &path);
