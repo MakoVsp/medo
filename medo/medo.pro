@@ -70,7 +70,8 @@ QML_FILES = qml/*.qml
 
 OTHER_FILES += $$QML_FILES *.qm \
     qml/CMedoDropListView.qml \
-    qml/CMedoEditPage.qml
+    qml/CMedoEditPage.qml \
+    qml/SlideDelegate.qml
                
 
 

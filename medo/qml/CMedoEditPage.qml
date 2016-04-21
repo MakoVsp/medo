@@ -191,129 +191,49 @@ CPage {
             Behavior on height {
                 NumberAnimation{duration: 100}
             }
-
-            delegate:MouseArea{
-                id:attRoot
+            delegate: SlideDelegate{
+                id:slideDelegate
                 width: attachementList.width
                 height:100
-                property real initX :0.0
-                property bool realPressed: false
-                Rectangle{
-                    id:deleteItem
-                    color: "grey"
-                    width: 100
-                    height:parent.height
-                    anchors.right: parent.right
-                    Text{
-                        anchors.centerIn: parent
-                        color: "black"
-                        font.pixelSize: 30
-                        text:"删除"
-                    }
-                    MouseArea{
-                        anchors.fill: parent
-//                        enabled:textItem.x = -100 ? true :false
-                        onClicked: {
-                            console.log("removeitem------------------",model.modelData.parentId,textItem.x)
-                            if(Math.abs(textItem.x + 100) > 0.1)
-                                return;
-                            medoRecordManager.deleteAttachment(model.modelData.parentId, model.modelData.path, model.modelData.name);
-                            root.attList.removeItem(index);
-                        }
-                    }
-                }
-                Rectangle{
-                    id:textItem
-                    width: parent.width
-                    height: parent.height
-                    color: attRoot.realPressed ? "lightgrey" : "white"
-//                    color: {
-//                        if(pressed) {
-//                            console.log("wpwpwppwpwpwpwpwppwpw",Math.abs(attRoot.initX - attRoot.mouseX) < 1)
-//                            if(Math.abs(attRoot.initX - attRoot.mouseX) < 1)
-//                                return "lightgrey"
-//                            else
-//                                return "white"
-
-//                        } else {
-//                            return "white"
-//                        }
-//                    }
-
-                    z:parent.z + 100
-                    Text{
-                        anchors.left: parent.left
-                        anchors.leftMargin: 40
-                        anchors.verticalCenter: parent.verticalCenter
-                        text:model.modelData.name
-                        font.family: localFont.name
-                        font.pixelSize :gUiConst.getValue("font11")
-                        font.bold: true
-                        color:"#8F7A66"
-                    }
-                }
 
 
                 Rectangle{
-                    width: parent.width
                     anchors.bottom: parent.bottom
                     height:1
+                    width: parent.width
                     color: "black"
+                    z:100
                 }
-                Timer{
-                    id:realPressedTimer
-                    interval: 50
-                    onTriggered: {
-                        if(Math.abs(attRoot.initX - attRoot.mouseX) < 1 && textItem.x === 0.0)
-                            attRoot.realPressed = true
-                    }
-
+                property Item textItem: Text{
+                    parent:slideDelegate.slideItem
+                    anchors.verticalCenter: slideDelegate.slideItem.verticalCenter
+                    anchors.left: slideDelegate.slideItem.left
+                    anchors.leftMargin: 40
+                    text:modelData.name
+                    font.family: localFont.name
+                    font.pixelSize :gUiConst.getValue("font11")
+                    font.bold: true
+                    color:"#8F7A66"
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    z:100
                 }
 
-                onPressed: {
-                    attRoot.initX = mouseX
-                    realPressedTimer.start()
-
-                }
-
-                onMouseXChanged: {
-                    attRoot.realPressed = false
-                    if(Math.abs(attRoot.initX - mouse.x) < 5)
-                        return;
-
-                    if((attRoot.initX - mouseX) < 100 && (attRoot.initX - mouseX) > 0.0) {
-                        textItem.x = -(attRoot.initX - mouseX)
-                    } else if((attRoot.initX - mouseX) >= -100 && (attRoot.initX - mouseX) <= 0.0 && textItem.x < 0.0) {
-                        textItem.x = -100 + (mouseX - attRoot.initX)
-                    }
-
+                onRightMenuTriggered: {
+                    medoRecordManager.deleteAttachment(model.modelData.parentId, model.modelData.path, model.modelData.name);
+                    root.attList.removeItem(index);
                 }
 
                 onReleased: {
-                    attRoot.realPressed = false
-                    if(Math.abs(attRoot.initX - mouse.x) < 5) {
+                    if(slideDelegate.realPressed) {
                         console.log("play=================",model.modelData.path,model.modelData.name)
-                        if(textItem.x != 0.0)
-                            return;
-
                         medoAttManager.play(model.modelData.path + "/" + model.modelData.name)
-                    } else {
-                        if((attRoot.initX - mouseX)>0) {  //left
-                            textItem.x = Math.abs(attRoot.initX - mouseX) > 50 ? -100 : 0
-                        } else {
-                            textItem.x = 0 //right
-                        }
                     }
-                }
-                onCanceled: {
-                    attRoot.realPressed = false
-                    if((attRoot.initX - mouseX)>0) {  //left
-                        textItem.x = Math.abs(attRoot.initX - mouseX) > 50 ? -100 : 0
-                    } else {
-                        textItem.x = 0 //right
-                    }
+                    slideDelegate.realPressed = false
+
                 }
             }
+
         }
     }
 }
