@@ -176,6 +176,19 @@ DBAttachmentList CMedoDbManager::getAttachments(const QString &parentId)
     return oList;
 }
 
+void CMedoDbManager::deleteRecord(const QString &id)
+{
+    QString str;
+    str.sprintf("DELETE from medo where id = '%s'", id.toUtf8().data());
+    qDebug() << "delete 111111111" << str;
+    m_pQuery->exec(str);
+
+    QString temp;
+    temp.sprintf("DELETE from attachment where parentId = '%s'", id.toUtf8().data());
+    qDebug() << "delete 22222" << temp;
+    m_pQuery->exec(temp);
+}
+
 
 CMedoDbManager::CMedoDbManager(QObject *parent) :
     QObject(parent)

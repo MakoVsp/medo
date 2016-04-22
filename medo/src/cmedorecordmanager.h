@@ -45,6 +45,7 @@ public:
     Q_INVOKABLE void deleteAttachment(const QString &parentId,
                                       const QString &path,
                                       QString name);
+    Q_INVOKABLE void deleteRecord(const QString &id);
 
 signals:
     void sendInitModelToThread();

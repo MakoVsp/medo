@@ -44,6 +44,7 @@ public:
                       QString content,
                       const QString &attachment,
                       const QString &date);
+    void deleteRecord(const QString &id);
 
     void addAttachment(const QString &parentId,
                        const QString &path,

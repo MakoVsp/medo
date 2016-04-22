@@ -23,16 +23,16 @@ ListView {
             height: 100
             property int visualIndex: DelegateModel.itemsIndex
 
-            MouseArea {
+            SlideDelegate {
                 id: delegateRoot
                 anchors.fill: parent
 
                 //                drag.target: cellItem
-                drag.axis: Drag.YAxis
+//                drag.axis: Drag.XAndYAxis
 
-                onPressAndHold: {
-                    delegateRoot.drag.target = cellItem
-                }
+//                onPressAndHold: {
+//                    delegateRoot.drag.target = cellItem
+//                }
 
                 onClicked: {
                     medoAttManager.updateAttModel(model.modelData.attachment)
@@ -41,36 +41,43 @@ ListView {
                                           model.modelData.attachment,model.modelData.attachmentList)
                 }
 
-                onReleased: {
-                    delegateRoot.drag.target = undefined
+//                onReleased: {
+//                    delegateRoot.drag.target = undefined
+//                }
+
+//                onCanceled: {
+//                    delegateRoot.drag.target = undefined
+//                }
+                onRightMenuTriggered: {
+                    console.log("wwwwwwwwwwwwwwwwwww")
+                    medoRecordManager.deleteRecord(model.modelData.id);
+                    medoRecordManager.removeItem(visualIndex);
+
                 }
 
-                onCanceled: {
-                    delegateRoot.drag.target = undefined
-                }
-
-                Rectangle {
+                property Item contentItem: Rectangle {
                     id: cellItem
-                    anchors.fill: parent
+                    parent:delegateRoot.slideItem
+                    anchors.fill: delegateRoot.slideItem
 
                     color: "#EEE4DA"
 //                    radius: 30
 //                    opacity: 0.5
 
-                    Drag.active: delegateRoot.drag.active
-                    Drag.source: rootItem
-                    Drag.hotSpot.x: cellItem.width/2
-                    Drag.hotSpot.y: cellItem.height/2
+//                    Drag.active: delegateRoot.drag.active
+//                    Drag.source: rootItem
+//                    Drag.hotSpot.x: cellItem.width/2
+//                    Drag.hotSpot.y: cellItem.height/2
 
-                    Drag.onActiveChanged: {
-                        if (Drag.active) {
-                            cellItem.anchors.fill = undefined
-                            cellItem.parent = root
-                        } else {
-                            cellItem.parent = delegateRoot
-                            cellItem.anchors.fill = delegateRoot
-                        }
-                    }
+//                    Drag.onActiveChanged: {
+//                        if (Drag.active) {
+//                            cellItem.anchors.fill = undefined
+//                            cellItem.parent = root
+//                        } else {
+//                            cellItem.parent = delegateRoot
+//                            cellItem.anchors.fill = delegateRoot
+//                        }
+//                    }
 
                     Text {
                         id: contentText
@@ -110,7 +117,7 @@ ListView {
                         color: "#1291A9"
                         height: 1
                         width: parent.width
-                        anchors.left: parent.left
+                        anchors.left: parent.leftmodel.modelData.id
                         anchors.leftMargin: 40
                         anchors.right: parent.right
                         anchors.rightMargin: 40
@@ -146,13 +153,13 @@ ListView {
 //                    }
                 }
 
-                Timer {
-                    id: viewMoveTimer
-                    interval: 500; running: false; repeat: false
-                    onTriggered: {
-                        root.contentY += cellItem.height
-                    }
-                }
+//                Timer {
+//                    id: viewMoveTimer
+//                    interval: 500; running: false; repeat: false
+//                    onTriggered: {
+//                        root.contentY += cellItem.height
+//                    }
+//                }
 
                 DropArea {
                     id: dropArea

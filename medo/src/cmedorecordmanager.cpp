@@ -102,6 +102,20 @@ void CMedoRecordManager::updateRecord(const QString &id,
     }
 }
 
+void CMedoRecordManager::deleteRecord(const QString &id)
+{
+    qDebug() << "CMedoRecordManager::deleteRecord" << id;
+    if (m_oMap.contains(id)) {
+        qDebug() << "CMedoRecordManager::deleteRecord---attachment" << m_oMap[id]->attachment();
+        QDir dir(m_oMap[id]->attachment());
+        if(dir.exists()){
+            dir.removeRecursively();
+        }
+        CMedoDbManager::instance()->deleteRecord(id);
+        m_oMap.take(id);
+    }
+}
+
 QString CMedoRecordManager::getNewAttPath()
 {
     qDebug() << Q_FUNC_INFO;

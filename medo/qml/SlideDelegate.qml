@@ -14,12 +14,12 @@ MouseArea{
     @brief 用于设置需要滑动的内容，使用CBaseSlideItem作为根目录，
                 宽高与delegate等宽高，且不可以使用anchors进行布局。
     */
-    property Item slideItem:Rectangle{
+    property Item slideItem:Item{
         width: delegateRoot.width
         height: delegateRoot.height
         parent: delegateRoot
         z:delegateRoot.z + 10
-        color: delegateRoot.realPressed ? "lightgrey" : "white"
+        //color: delegateRoot.realPressed ? "lightgrey" : "white"
 
     }
 
@@ -40,7 +40,6 @@ MouseArea{
     @brief 用于设置右侧滑动菜单
     */
     property Item _rightMenuItem :Rectangle{
-        anchors.right: delegateRoot.right
         width: 100
         height:delegateRoot.height
         color: "red"
@@ -158,6 +157,7 @@ MouseArea{
         }
     }
     onReleased: {
+        console.log("rererereressssssssssssssss")
         privateData.releaseX = mouseX
         clearTouchState()
     }
@@ -228,11 +228,11 @@ MouseArea{
         }
     }
 
-    Binding{
-        target:delegateRoot
-        property:"slideable"
-        value:(delegateRoot.ListView.view.slideable)
-    }
+//    Binding{
+//        target:delegateRoot
+//        property:"slideable"
+//        value:(delegateRoot.ListView.view.slideable)
+//    }
     PropertyAnimation{
         id:slideItemPA
         target:slideItem
