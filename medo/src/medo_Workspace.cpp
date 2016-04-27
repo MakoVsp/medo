@@ -1,6 +1,7 @@
 #include "medo_Workspace.h"
 #include "cmedorecordmanager.h"
 #include "cmedoattmanager.h"
+#include "cmedorecord.h"
 
 #include <QDebug>
 #include <QQmlContext>
@@ -10,6 +11,7 @@ medo_Workspace::medo_Workspace()
     : CWorkspace()
 {
     qmlRegisterType<CMedoListModel>("CMedoListModel", 1, 0, "CMedoListModel");
+    qmlRegisterType<CMedoRecord>("CMedoRecord", 1, 0, "CMedoRecord");
     m_pMedoRecordManager = QSharedPointer<CMedoRecordManager>(new CMedoRecordManager());
     if (m_pMedoRecordManager.data()) {
         m_pMedoRecordManager.data()->initModel();

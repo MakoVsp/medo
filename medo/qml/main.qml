@@ -117,7 +117,15 @@ CPageStackWindow {
                         onClicked: {
                             console.log("onClicked newBtn !!!")
     //                        popMenu.show()
-                            rootPage.showEditPage("OPEN_NEW", "", medoRecordManager.currentTime(), "", medoRecordManager.getNewAttPath())
+                            var recordId = new Date().toLocaleTimeString(Qt.locale(""));
+                            var dateTime = medoRecordManager.currentTime();
+                            console.log("new id=======================",recordId)
+                            medoRecordManager.newRecord(recordId,"", medoRecordManager.getNewAttPath(),dateTime)
+                            rootPage.showEditPage("OPEN_NEW", "",
+                                                  dateTime,
+                                                  recordId,
+                                                  medoRecordManager.getNewAttPath(),
+                                                  medoRecordManager.getRecord(recordId).attachmentList)
                         }
                     }
                 }

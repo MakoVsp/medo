@@ -46,6 +46,7 @@ public:
                                       const QString &path,
                                       QString name);
     Q_INVOKABLE void deleteRecord(const QString &id);
+    Q_INVOKABLE CMedoRecord* getRecord(const QString &id);
 
 signals:
     void sendInitModelToThread();

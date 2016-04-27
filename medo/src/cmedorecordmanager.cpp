@@ -112,8 +112,18 @@ void CMedoRecordManager::deleteRecord(const QString &id)
             dir.removeRecursively();
         }
         CMedoDbManager::instance()->deleteRecord(id);
+        removeItem(m_oMap[id]);
         m_oMap.take(id);
     }
+
+}
+
+CMedoRecord* CMedoRecordManager::getRecord(const QString &id)
+{
+    if (m_oMap.contains(id))
+        return m_oMap[id];
+    else
+        return new CMedoRecord("","","","",this);
 }
 
 QString CMedoRecordManager::getNewAttPath()

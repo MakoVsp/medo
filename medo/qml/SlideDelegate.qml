@@ -42,7 +42,7 @@ MouseArea{
     property Item _rightMenuItem :Rectangle{
         width: 100
         height:delegateRoot.height
-        color: "red"
+        color: "#5274B4"
         z:delegateRoot.z +1
         Text {
             id: name

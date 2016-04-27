@@ -17,11 +17,11 @@ class CMedoRecord : public QObject
     Q_PROPERTY(CMedoListModel* attachmentList READ attachmentList  NOTIFY attachmentListChanged)
 
 public:
-    CMedoRecord(const QString &id,
-                const QString &content,
-                const QString &attachment,
-                const QString &date,
-                QObject *parent = 0);
+    CMedoRecord( QString id = "",
+                 QString content = "",
+                 QString attachment = "",
+                 QString date = "",
+                 QObject *parent = 0);
 
     QString id() const;
     QString setId(const QString &id);

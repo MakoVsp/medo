@@ -51,8 +51,6 @@ ListView {
                 onRightMenuTriggered: {
                     console.log("wwwwwwwwwwwwwwwwwww")
                     medoRecordManager.deleteRecord(model.modelData.id);
-                    medoRecordManager.removeItem(visualIndex);
-
                 }
 
                 property Item contentItem: Rectangle {
@@ -89,7 +87,7 @@ ListView {
                         anchors.rightMargin: 40
                         font.pixelSize: 24
                         height: 28
-                        clip: true
+//                        clip: true
                         color: "#777777"
 //                        color: "#F9F6F2"
                         elide: Text.ElideRight
@@ -117,11 +115,11 @@ ListView {
                         color: "#1291A9"
                         height: 1
                         width: parent.width
-                        anchors.left: parent.leftmodel.modelData.id
-                        anchors.leftMargin: 40
-                        anchors.right: parent.right
-                        anchors.rightMargin: 40
-                        anchors.bottom: parent.bottom
+//                        anchors.left: parent.left
+//                        anchors.leftMargin: 40
+//                        anchors.right: parent.right
+//                        anchors.rightMargin: 40
+//                        anchors.bottom: parent.bottom
                         z: parent.z+2
                     }
 

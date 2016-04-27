@@ -15,7 +15,7 @@ CPage {
     property string recordId: ""
     property bool recording: false
     property string attPath: ""
-    property var attList: null
+    property alias attList: attachementList.model
 
     FontLoader { id: localFont; source: "qrc:///fonts/DroidSansFallback.ttf" }
 
@@ -23,8 +23,8 @@ CPage {
        if (status === CPageStatus.Show) {
            if (root.openType === "OPEN_NEW" && root.textContent == "") {
                editArea.focus = true
-               root.recordId = new Date().toLocaleTimeString(Qt.locale(""));
-               console.log("new id=======================",root.recordId)
+//               root.recordId = new Date().toLocaleTimeString(Qt.locale(""));
+//               console.log("new id=======================",root.recordId)
            } else if(root.openType === "OPEN_EDIT" ) {
 
            }
@@ -64,24 +64,35 @@ CPage {
 
             onLeftItemTriggered: {
                 editArea.focus = false
+                if(editArea.text === "") {
 
-                if (editArea.text != root.textContent) {
-                    console.log("Edit Done!!!")
-                    if (root.openType === "OPEN_EDIT") {
-                        console.log("medo === OPEN_EDIT")
-                        medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())
-                    } else if (root.openType === "OPEN_NEW"){
-                        console.log("medo === OPEN_NEW")
-                        if (editArea.text !== "") {
-                            medoRecordManager.newRecord(root.recordId,editArea.text, root.attPath, medoRecordManager.currentTime())
-                        }
-                    }
-                } else {
-                    console.log("Not Edit !!!")
-                    medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())//only update voice
+                    console.log("delete--record")
+                    medoRecordManager.deleteRecord(root.recordId);
+                    pageStack.pop();
+                    return;
                 }
-
+                console.log("update--record")
+                medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())//only update voice
                 pageStack.pop();
+
+//                if (editArea.text != root.textContent) {
+//                    console.log("Edit Done!!!")
+//                    if (root.openType === "OPEN_EDIT") {
+//                        console.log("medo === OPEN_EDIT")
+//                        medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())
+//                    } else if (root.openType === "OPEN_NEW"){
+//                        console.log("medo === OPEN_NEW")
+//                        if (editArea.text !== "") {
+//                            medoRecordManager.newRecord(root.recordId,editArea.text, root.attPath, medoRecordManager.currentTime())
+//                        }
+
+//                    }
+//                } else {
+//                    console.log("Not Edit !!!")
+//                    medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())//only update voice
+//                }
+
+//                pageStack.pop();
 //                editArea.realText = ""
             }
         }
@@ -155,6 +166,7 @@ CPage {
                         root.recording = !root.recording
                         console.log("onClicked recordBtn !!!",root.recording)
                         if (root.recording) {
+                            attachementList.visible = true
                             medoRecordManager.startRecorder(root.recordId,root.attPath)
                             gScreenInfo.setWindowProperty("SCREEN_ALWAYS_ON",true)
                         } else {
@@ -186,7 +198,7 @@ CPage {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             visible: false
-            model:root.attList
+//            model:root.attList
             clip: true
             Behavior on height {
                 NumberAnimation{duration: 100}

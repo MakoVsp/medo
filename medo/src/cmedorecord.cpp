@@ -2,11 +2,11 @@
 #include "cmedolistmodel.h"
 #include "attachment.h"
 
-CMedoRecord::CMedoRecord(const QString &id,
-                         const QString &content,
-                         const QString &attachment,
-                         const QString &date,
-                         QObject *parent) :
+CMedoRecord::CMedoRecord( QString id,
+                          QString content,
+                          QString attachment,
+                          QString date,
+                          QObject *parent) :
     QObject(parent),
     m_sId(id),
     m_sContent(content),
