@@ -252,11 +252,16 @@ CPage {
                         console.log("onClicked recordBtn !!!",root.recording)
                         if (root.recording) {
                             attachementList.visible = true
+                            Qt.inputMethod.hide()
                             medoRecordManager.startRecorder(root.recordId,root.attPath)
                             gScreenInfo.setWindowProperty("SCREEN_ALWAYS_ON",true)
                         } else {
                             medoAttManager.stopRecorder()
                             gScreenInfo.setWindowProperty("SCREEN_ALWAYS_ON",false)
+                            if (editArea.focus) {
+                                attachementList.visible = false
+                                Qt.inputMethod.show()
+                            }
                         }
                     }
                 }
