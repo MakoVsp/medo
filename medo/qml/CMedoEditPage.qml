@@ -66,7 +66,7 @@ CPage {
 
                 onClicked: {
                     editArea.focus = false
-                    if(editArea.text === "") {
+                    if(editArea.text.trim() === "") {
 
                         console.log("delete--record")
                         medoRecordManager.deleteRecord(root.recordId);
