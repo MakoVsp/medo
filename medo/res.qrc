@@ -10,5 +10,6 @@
         <file>images/stop.png</file>
         <file>images/lists.png</file>
         <file>qml/SlideDelegate.qml</file>
+        <file>fonts/FontAwesome.ttf</file>
     </qresource>
 </RCC>

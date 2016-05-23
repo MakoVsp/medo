@@ -4,11 +4,17 @@ import QtGraphicalEffects 1.0
 import com.syberos.basewidgets 2.0
 
 CPageStackWindow {
-    initialPage:CPage{
-        width: Screen.desktopAvailableWidth
-        height: Screen.desktopAvailableHeight
+    FontLoader {
+        source: "qrc:/fonts/FontAwesome.ttf"
+    }
+
+    initialPage: CPage {
 
         FontLoader { id: localFont; source: "qrc:///fonts/DroidSansFallback.ttf" }
+
+        color: "#72cfD7"
+        statusBarHoldEnabled: true
+        statusBarHoldItemColor: "#72cfD7"
 
         onActiveChanged: {
             //            if (active) {
@@ -16,12 +22,8 @@ CPageStackWindow {
             //            }
         }
 
-        Item {
+        contentAreaItem: Item {
             id: rootPage
-
-            anchors.fill: parent
-            anchors.bottomMargin: 96
-
             //        onStatusChanged: {
             //            if (status === CPageStatus.WillShow) {
             //                popMenu.show()
@@ -61,18 +63,10 @@ CPageStackWindow {
                     leftItemEnabled: false
                     titleAreaCentered: true
 
-                    //                Rectangle {
-                    //                    id: titleBarBackground
-                    //                    anchors.fill: parent
-                    //                    color: "#8F7A66"
-                    //                    z:parent.z-1
-                    //                }
-
                     backgroundComponent: Rectangle {
                         id: titleBarBackground
-                        // anchors.fill: parent
                         color: "#72cfD7"
-                        z:parent.z-1
+                        z: parent.z - 1
                     }
 
                     titleItemComponent: Text {
@@ -101,9 +95,9 @@ CPageStackWindow {
                 CMedoDropListView {
                     id: dropListView
                     anchors.top: titleBar.bottom
-                    anchors.topMargin: 5
+                    anchors.topMargin: 1
                     anchors.bottom: newBtnRoot.top
-                    anchors.bottomMargin: 3
+                    anchors.bottomMargin: 1
                     width: rootPage.width
                     height: dropListView.contentHeight
                     clip: true

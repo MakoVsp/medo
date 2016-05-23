@@ -41,6 +41,35 @@ ListView {
                                           model.modelData.attachment,model.modelData.attachmentList)
                 }
 
+                _rightMenuItem: Item {
+                    width: 140
+                    height: delegateRoot.height
+
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: 1
+
+                        color: "#72cfD7"
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            medoRecordManager.deleteRecord(model.modelData.id);
+                        }
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+
+                        font.family: "FontAwesome"
+                        font.pixelSize: 40
+
+                        color: "white"
+                        text: "\uf014"
+                    }
+                }
+
                 //                onReleased: {
                 //                    delegateRoot.drag.target = undefined
                 //                }
@@ -48,17 +77,13 @@ ListView {
                 //                onCanceled: {
                 //                    delegateRoot.drag.target = undefined
                 //                }
-                onRightMenuTriggered: {
-                    console.log("wwwwwwwwwwwwwwwwwww")
-                    medoRecordManager.deleteRecord(model.modelData.id);
-                }
 
                 property Item contentItem: Rectangle {
                     id: cellItem
                     parent:delegateRoot.slideItem
                     anchors.fill: delegateRoot.slideItem
 
-                    anchors.margins: 3
+                    anchors.margins: 1
 
                     border {
                         color: "#F3F4F6"
@@ -86,14 +111,17 @@ ListView {
 
                     Text {
                         id: contentText
-                        anchors.left: parent.left
-                        anchors.leftMargin: 40
-                        anchors.right: timeText.left
-                        anchors.rightMargin: 40
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors {
+                            fill: parent
+                            leftMargin: 40
+                            rightMargin: 40
+                        }
+
+                        verticalAlignment: Text.AlignVCenter
                         font.pixelSize: 36
                         //                        clip: true
-                        color: "#777777"
+                        color: "#1b1c27"
+                        opacity: 0.75
                         //                        color: "#F9F6F2"
                         elide: Text.ElideRight
                         font.family: localFont.name
@@ -105,10 +133,12 @@ ListView {
                         id: timeText
                         anchors.right: parent.right
                         anchors.rightMargin: 40
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 5
 
                         font.pixelSize: 24
                         color: "#777777"
+                        opacity: 0.75
 
                         text: model.modelData.date
                     }

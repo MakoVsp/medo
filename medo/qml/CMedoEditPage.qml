@@ -1,13 +1,16 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 import com.syberos.basewidgets 2.0
 
 CPage {
     id: root
 
-    orientationLock: CPageOrientation.LockPortrait
-    statusBarHoldItemOpacity: 1.0
+
+    color: "#72cfD7"
     statusBarHoldEnabled: true
-    statusBarHoldItemColor: "#ffffff"
+    statusBarHoldItemColor: "#72cfD7"
+
+    // orientationLock: CPageOrientation.LockPortrait
 
     property string textContent: ""
     property string lastEditTime: ""
@@ -20,22 +23,22 @@ CPage {
     FontLoader { id: localFont; source: "qrc:///fonts/DroidSansFallback.ttf" }
 
     onStatusChanged: {
-       if (status === CPageStatus.Show) {
-           if (root.openType === "OPEN_NEW" && root.textContent == "") {
-               editArea.focus = true
-//               root.recordId = new Date().toLocaleTimeString(Qt.locale(""));
-//               console.log("new id=======================",root.recordId)
-           } else if(root.openType === "OPEN_EDIT" ) {
+        if (status === CPageStatus.Show) {
+            if (root.openType === "OPEN_NEW" && root.textContent == "") {
+                editArea.focus = true
+                //               root.recordId = new Date().toLocaleTimeString(Qt.locale(""));
+                //               console.log("new id=======================",root.recordId)
+            } else if(root.openType === "OPEN_EDIT" ) {
 
-           }
+            }
 
-       } else if (status === CPageStatus.WillShow) {
-           // todo
-           root.recording = false
-       }
+        } else if (status === CPageStatus.WillShow) {
+            // todo
+            root.recording = false
+        }
     }
 
-    contentAreaItem: Item{
+    contentAreaItem: Item {
 
         Rectangle {
             anchors.fill: parent
@@ -48,53 +51,111 @@ CPage {
             anchors.left: parent.left
             anchors.right: parent.right
             titleItemEnabled: false
+            leftItemEnabled: false
             rightItemEnabled: false
-            leftItemText: "保存并返回"
-            spacingBetweenLeftBorderAndLeftItem: 40
+            MouseArea {
+                id: newFileButton
 
-            Component.onCompleted: {
-                leftItem.textColor = Qt.binding(
-                            function() {
-                                return leftItem.pressed ? gUiConst.getValue("color08") :
-                                                          gUiConst.getValue("color05")
-                            }
-                            )
-                leftItem.width = Qt.binding(function(){return 180})
-            }
-
-            onLeftItemTriggered: {
-                editArea.focus = false
-                if(editArea.text === "") {
-
-                    console.log("delete--record")
-                    medoRecordManager.deleteRecord(root.recordId);
-                    pageStack.pop();
-                    return;
+                anchors {
+                    left: parent.left
+                    top: parent.top
+                    bottom: parent.bottom
                 }
-                console.log("update--record")
-                medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())//only update voice
-                pageStack.pop();
 
-//                if (editArea.text != root.textContent) {
-//                    console.log("Edit Done!!!")
-//                    if (root.openType === "OPEN_EDIT") {
-//                        console.log("medo === OPEN_EDIT")
-//                        medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())
-//                    } else if (root.openType === "OPEN_NEW"){
-//                        console.log("medo === OPEN_NEW")
-//                        if (editArea.text !== "") {
-//                            medoRecordManager.newRecord(root.recordId,editArea.text, root.attPath, medoRecordManager.currentTime())
-//                        }
+                width: 320
 
-//                    }
-//                } else {
-//                    console.log("Not Edit !!!")
-//                    medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())//only update voice
-//                }
+                onClicked: {
+                    editArea.focus = false
+                    if(editArea.text === "") {
 
-//                pageStack.pop();
-//                editArea.realText = ""
+                        console.log("delete--record")
+                        medoRecordManager.deleteRecord(root.recordId);
+                        pageStack.pop();
+                        return;
+                    }
+                    console.log("update--record")
+                    medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())//only update voice
+                    pageStack.pop();
+
+                    //                if (editArea.text != root.textContent) {
+                    //                    console.log("Edit Done!!!")
+                    //                    if (root.openType === "OPEN_EDIT") {
+                    //                        console.log("medo === OPEN_EDIT")
+                    //                        medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())
+                    //                    } else if (root.openType === "OPEN_NEW"){
+                    //                        console.log("medo === OPEN_NEW")
+                    //                        if (editArea.text !== "") {
+                    //                            medoRecordManager.newRecord(root.recordId,editArea.text, root.attPath, medoRecordManager.currentTime())
+                    //                        }
+
+                    //                    }
+                    //                } else {
+                    //                    console.log("Not Edit !!!")
+                    //                    medoRecordManager.updateRecord(root.recordId, editArea.text,root.attPath, medoRecordManager.currentTime())//only update voice
+                    //                }
+
+                    //                pageStack.pop();
+                    //                editArea.realText = ""
+                }
+
+                //                Rectangle {
+                //                    anchors.fill: parent
+                //                    color: "yellow"
+                //                }
+
+                Text {
+                    id: icon
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        bottom: parent.bottom
+
+                        leftMargin: 40
+                        topMargin: 2
+                    }
+
+                    verticalAlignment: Text.AlignVCenter
+
+                    font.family: "FontAwesome"
+                    font.pixelSize: 40
+
+                    color: "white"
+                    text: "\uf053"
+                }
+
+                Text {
+                    anchors {
+                        top: parent.top
+                        left: icon.right
+                        bottom: parent.bottom
+
+                        leftMargin: 20
+                    }
+
+                    verticalAlignment: Text.AlignVCenter
+
+                    font.pixelSize: 36
+
+                    color: "white"
+                    text: "保存并返回"
+                }
             }
+
+            backgroundComponent: Rectangle {
+                id: titleBarBackground
+                color: "#72cfD7"
+                z: parent.z - 1
+            }
+
+            //            Component.onCompleted: {
+            //                leftItem.textColor = Qt.binding(
+            //                            function() {
+            //                                return leftItem.pressed ? gUiConst.getValue("color08") :
+            //                                                          gUiConst.getValue("color05")
+            //                            }
+            //                            )
+            //                leftItem.width = Qt.binding(function(){return 180})
+            //            }
         }
 
 
@@ -110,10 +171,11 @@ CPage {
             anchors.bottom: voiceBtn.top
             anchors.bottomMargin: 30
             font.family: localFont.name
-            font.pixelSize : 30
-            font.bold: true
+            font.pixelSize : 36
+            // font.bold: true
             focus: false
-            textColor : "#776E62"
+            textColor : "#1b1c27"
+            opacity: 0.75
             wrapMode: TextEdit.Wrap
             realText: root.textContent
 
@@ -123,15 +185,40 @@ CPage {
             }
         }
 
+        Connections {
+            target: Qt.inputMethod
+            onVisibleChanged: {
+                if (Qt.inputMethod.visible) {
+                    attachementList.visible = false;
+                }
+            }
+        }
+
         Rectangle {
             id: voiceBtn
+
+            //            Item {
+            //                anchors.fill: parent
+
+            //                LinearGradient {
+            //                    anchors.fill: parent
+            //                    start: Qt.point(0, 0)
+            //                    end: Qt.point(0, parent.height)
+            //                    gradient: Gradient {
+            //                        GradientStop { position: 0.0; color: "#EEEEEE" }
+            //                        GradientStop { position: 1.0; color: "#FFFFFF" }
+            //                    }
+            //                }
+
+            //            }
 
             width: parent.width
             height: 130
             anchors.bottom: attachementList.top //parent.bottom
+            anchors.bottomMargin: 4
             anchors.left: parent.left
             anchors.right: parent.right
-//            color: "salmon"
+            //            color: "salmon"
             opacity: 0.5
 
             Text {
@@ -186,7 +273,16 @@ CPage {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        attachementList.visible = !attachementList.visible
+
+                        if (attachementList.visible) {
+                            attachementList.visible = false;
+                            if (editArea.focus) {
+                                Qt.inputMethod.show();
+                            }
+                        } else {
+                            Qt.inputMethod.hide();
+                            attachementList.visible = true;
+                        }
                     }
                 }
             }
@@ -194,28 +290,69 @@ CPage {
         ListView{
             id:attachementList
             width: parent.width
-            height:visible ? parent.height/3 : 0
-            anchors.horizontalCenter: parent.horizontalCenter
+            height:visible ? parent.height/2 : 0
             anchors.bottom: parent.bottom
             visible: false
-//            model:root.attList
+            //            model:root.attList
+
+            Rectangle {
+                anchors.fill: parent
+                color: "#F5F6F8"
+                z: -1
+            }
+
             clip: true
             Behavior on height {
                 NumberAnimation{duration: 100}
             }
-            delegate: SlideDelegate{
+            delegate: SlideDelegate {
                 id:slideDelegate
                 width: attachementList.width
-                height:100
+                height:attachementList.height / 6
 
+                _rightMenuItem: Item {
+                    width: 140
+                    height: slideDelegate.height
 
-                Rectangle{
-                    anchors.bottom: parent.bottom
-                    height:1
-                    width: parent.width
-                    color: "black"
-                    z:100
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: 1
+
+                        color: "#72cfD7"
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            medoRecordManager.deleteAttachment(model.modelData.parentId, model.modelData.path, model.modelData.name);
+                            root.attList.removeItem(index);
+                        }
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+
+                        font.family: "FontAwesome"
+                        font.pixelSize: 40
+
+                        color: "white"
+                        text: "\uf014"
+                    }
                 }
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "white"
+
+                    anchors.margins: 1
+
+                    border {
+                        color: "#F3F4F6"
+                        width: 2
+                    }
+                    z:-1
+                }
+
                 property Item textItem: Text{
                     parent:slideDelegate.slideItem
                     anchors.verticalCenter: slideDelegate.slideItem.verticalCenter
@@ -223,17 +360,13 @@ CPage {
                     anchors.leftMargin: 40
                     text:modelData.name
                     font.family: localFont.name
-                    font.pixelSize :gUiConst.getValue("font11")
-                    font.bold: true
-                    color:"#8F7A66"
+                    font.pixelSize: 32
+                    // font.bold: true
+                    color:"#1b1c27"
+                    opacity: 0.75
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     z:100
-                }
-
-                onRightMenuTriggered: {
-                    medoRecordManager.deleteAttachment(model.modelData.parentId, model.modelData.path, model.modelData.name);
-                    root.attList.removeItem(index);
                 }
 
                 onReleased: {
