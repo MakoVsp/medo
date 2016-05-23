@@ -31,23 +31,25 @@ CPageStackWindow {
             //        }
 
             function showEditPage(openType, text, lastEditTime, recordId, attPath,attList) {
-                var component = pageStack.getCachedPage(Qt.resolvedUrl("CMedoEditPage.qml"),"CMedoEditPage");
+//                var component = pageStack.getCachedPage(Qt.resolvedUrl("CMedoEditPage.qml"),"CMedoEditPage");
 
-                component.openType = openType
-                component.textContent = text
-                component.lastEditTime = lastEditTime
-                component.recordId = recordId
-                component.attPath = attPath
-                component.attList = attList
+//                component.openType = openType
+//                component.textContent = text
+//                component.lastEditTime = lastEditTime
+//                component.recordId = recordId
+//                component.attPath = attPath
+//                component.attList = attList
 
-                console.log("showEditPage :: openType = ", component.openType)
-                console.log("showEditPage :: textContent = ", component.textContent)
-                console.log("showEditPage :: lastEditTime = ", component.lastEditTime)
-                console.log("showEditPage :: recordId = ", component.recordId)
-                console.log("showEditPage :: attPath = ", component.attPath)
-                console.log("showEditPage :: attPathlist = ", component.attList)
+//                console.log("showEditPage :: openType = ", component.openType)
+//                console.log("showEditPage :: textContent = ", component.textContent)
+//                console.log("showEditPage :: lastEditTime = ", component.lastEditTime)
+//                console.log("showEditPage :: recordId = ", component.recordId)
+//                console.log("showEditPage :: attPath = ", component.attPath)
+//                console.log("showEditPage :: attPathlist = ", component.attList)
 
-                pageStack.push(component);
+//                pageStack.push(component);
+                var  component = Qt.createComponent(Qt.resolvedUrl("CMedoEditPage.qml"));
+                pageStack.push(component, {openType: openType,textContent:text,lastEditTime:lastEditTime,recordId:recordId,attPath:attPath,attList:attList});
             }
 
             Item {

@@ -245,8 +245,10 @@ CPage {
                     anchors.fill: parent
                     onClicked: {
                         console.log("onClicked recordBtn !!!--text",editArea.text)
-                        if(editArea.text === "")
+                        if(editArea.text.trim() === ""){
+                            gToast.requestToast(qsTr("请输入内容再录音！"))
                             return;
+                        }
 
                         root.recording = !root.recording
                         console.log("onClicked recordBtn !!!",root.recording)
