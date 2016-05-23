@@ -20,7 +20,7 @@ ListView {
         delegate: Item {
             id: rootItem
             width: gScreenInfo.platformWidth
-            height: 100
+            height: root.height / 8
             property int visualIndex: DelegateModel.itemsIndex
 
             SlideDelegate {
@@ -28,11 +28,11 @@ ListView {
                 anchors.fill: parent
 
                 //                drag.target: cellItem
-//                drag.axis: Drag.XAndYAxis
+                //                drag.axis: Drag.XAndYAxis
 
-//                onPressAndHold: {
-//                    delegateRoot.drag.target = cellItem
-//                }
+                //                onPressAndHold: {
+                //                    delegateRoot.drag.target = cellItem
+                //                }
 
                 onClicked: {
                     medoAttManager.updateAttModel(model.modelData.attachment)
@@ -41,13 +41,13 @@ ListView {
                                           model.modelData.attachment,model.modelData.attachmentList)
                 }
 
-//                onReleased: {
-//                    delegateRoot.drag.target = undefined
-//                }
+                //                onReleased: {
+                //                    delegateRoot.drag.target = undefined
+                //                }
 
-//                onCanceled: {
-//                    delegateRoot.drag.target = undefined
-//                }
+                //                onCanceled: {
+                //                    delegateRoot.drag.target = undefined
+                //                }
                 onRightMenuTriggered: {
                     console.log("wwwwwwwwwwwwwwwwwww")
                     medoRecordManager.deleteRecord(model.modelData.id);
@@ -58,41 +58,46 @@ ListView {
                     parent:delegateRoot.slideItem
                     anchors.fill: delegateRoot.slideItem
 
-                    color: "#EEE4DA"
-//                    radius: 30
-//                    opacity: 0.5
+                    anchors.margins: 3
 
-//                    Drag.active: delegateRoot.drag.active
-//                    Drag.source: rootItem
-//                    Drag.hotSpot.x: cellItem.width/2
-//                    Drag.hotSpot.y: cellItem.height/2
+                    border {
+                        color: "#F3F4F6"
+                        width: 2
+                    }
 
-//                    Drag.onActiveChanged: {
-//                        if (Drag.active) {
-//                            cellItem.anchors.fill = undefined
-//                            cellItem.parent = root
-//                        } else {
-//                            cellItem.parent = delegateRoot
-//                            cellItem.anchors.fill = delegateRoot
-//                        }
-//                    }
+                    color: "white"
+                    //                    radius: 30
+                    //                    opacity: 0.5
+
+                    //                    Drag.active: delegateRoot.drag.active
+                    //                    Drag.source: rootItem
+                    //                    Drag.hotSpot.x: cellItem.width/2
+                    //                    Drag.hotSpot.y: cellItem.height/2
+
+                    //                    Drag.onActiveChanged: {
+                    //                        if (Drag.active) {
+                    //                            cellItem.anchors.fill = undefined
+                    //                            cellItem.parent = root
+                    //                        } else {
+                    //                            cellItem.parent = delegateRoot
+                    //                            cellItem.anchors.fill = delegateRoot
+                    //                        }
+                    //                    }
 
                     Text {
                         id: contentText
                         anchors.left: parent.left
                         anchors.leftMargin: 40
-                        anchors.top: parent.top
-                        anchors.topMargin: 36
                         anchors.right: timeText.left
                         anchors.rightMargin: 40
-                        font.pixelSize: 24
-                        height: 28
-//                        clip: true
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: 36
+                        //                        clip: true
                         color: "#777777"
-//                        color: "#F9F6F2"
+                        //                        color: "#F9F6F2"
                         elide: Text.ElideRight
                         font.family: localFont.name
-                        font.bold: true
+                        // font.bold: true
                         text: model.modelData.content
                     }
 
@@ -100,9 +105,7 @@ ListView {
                         id: timeText
                         anchors.right: parent.right
                         anchors.rightMargin: 40
-                        anchors.top: contentText.top
-                        height: contentText.height
-                        verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
 
                         font.pixelSize: 24
                         color: "#777777"
@@ -110,6 +113,7 @@ ListView {
                         text: model.modelData.date
                     }
 
+                    /*
                     Rectangle {
                         id: bottomLine
                         color: "#1291A9"
@@ -122,42 +126,43 @@ ListView {
 //                        anchors.bottom: parent.bottom
                         z: parent.z+2
                     }
+                    */
 
-//                    Text {
-//                        id: timeText
-//                        anchors.right: parent.right
-//                        anchors.rightMargin: sessionHistoryListView.editing ? 100 : 40
-//                        anchors.top: nameText.top
-//                        height: nameText.height
-//                        verticalAlignment: Text.AlignVCenter
+                    //                    Text {
+                    //                        id: timeText
+                    //                        anchors.right: parent.right
+                    //                        anchors.rightMargin: sessionHistoryListView.editing ? 100 : 40
+                    //                        anchors.top: nameText.top
+                    //                        height: nameText.height
+                    //                        verticalAlignment: Text.AlignVCenter
 
-//                        font.pixelSize: 24
-//                        color: "#777777"
+                    //                        font.pixelSize: 24
+                    //                        color: "#777777"
 
-//                        text: Qt.formatDateTime(imSessionListPage.listwallClockCurrentTime, "yyyy") !== Qt.formatDateTime(model.modelData.time, "yyyy") ?
-//                                  Qt.formatDateTime(model.modelData.time, "yyyy-MM-dd hh:mm") :
-//                                  Qt.formatDateTime(imSessionListPage.listwallClockCurrentTime, "MM-dd") !== Qt.formatDateTime(model.modelData.time, "MM-dd") ?
-//                                      Qt.formatDateTime(model.modelData.time, "MM-dd hh:mm") : Qt.formatDateTime(model.modelData.time, "hh:mm")
-//                    }
+                    //                        text: Qt.formatDateTime(imSessionListPage.listwallClockCurrentTime, "yyyy") !== Qt.formatDateTime(model.modelData.time, "yyyy") ?
+                    //                                  Qt.formatDateTime(model.modelData.time, "yyyy-MM-dd hh:mm") :
+                    //                                  Qt.formatDateTime(imSessionListPage.listwallClockCurrentTime, "MM-dd") !== Qt.formatDateTime(model.modelData.time, "MM-dd") ?
+                    //                                      Qt.formatDateTime(model.modelData.time, "MM-dd hh:mm") : Qt.formatDateTime(model.modelData.time, "hh:mm")
+                    //                    }
 
-//                    onYChanged: {
-//                        console.log("cellItem.y = ", cellItem.y)
-//                        console.log("xxx = ", root.height - (root.visibleArea.yPosition * root.height + cellItem.height))
-//                        if (cellItem.y > root.height - (root.visibleArea.yPosition * root.height + cellItem.height)) {
-//                            if (!viewMoveTimer.running) {
-//                                viewMoveTimer.restart()
-//                            }
-//                        }
-//                    }
+                    //                    onYChanged: {
+                    //                        console.log("cellItem.y = ", cellItem.y)
+                    //                        console.log("xxx = ", root.height - (root.visibleArea.yPosition * root.height + cellItem.height))
+                    //                        if (cellItem.y > root.height - (root.visibleArea.yPosition * root.height + cellItem.height)) {
+                    //                            if (!viewMoveTimer.running) {
+                    //                                viewMoveTimer.restart()
+                    //                            }
+                    //                        }
+                    //                    }
                 }
 
-//                Timer {
-//                    id: viewMoveTimer
-//                    interval: 500; running: false; repeat: false
-//                    onTriggered: {
-//                        root.contentY += cellItem.height
-//                    }
-//                }
+                //                Timer {
+                //                    id: viewMoveTimer
+                //                    interval: 500; running: false; repeat: false
+                //                    onTriggered: {
+                //                        root.contentY += cellItem.height
+                //                    }
+                //                }
 
                 DropArea {
                     id: dropArea
