@@ -227,11 +227,9 @@ CPage {
                 anchors.leftMargin: 40
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 20
-                height: 30
-                font.family: localFont.name
-                font.pixelSize :gUiConst.getValue("font11")
-                font.bold: true
-                color:"#8F7A66"
+                font.pixelSize: 24
+                color:"#1b1c27"
+                opacity: 0.75
                 text: root.lastEditTime
             }
 
@@ -263,13 +261,24 @@ CPage {
                     }
                 }
             }
-            Image {
+            Item {
                 id: listImage
                 anchors.right: parent.right
-                anchors.rightMargin:40
                 anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/images/lists.png"
-                sourceSize: Qt.size(100, 100)
+                width: parent.height
+                height: parent.height
+
+                Text {
+                    anchors.centerIn: parent
+
+                    font.family: "FontAwesome"
+                    font.pixelSize: 50
+
+                    color: "#1b1c27"
+                    opacity: 0.75
+                    text: "\uf0c9"
+                }
+
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -295,6 +304,23 @@ CPage {
             visible: false
             //            model:root.attList
 
+            property Item selectedItem: null
+
+            function unsetSelectedItem()
+            {
+                if (selectedItem) {
+                    selectedItem.toInitState();
+                    selectedItem = null;
+                }
+            }
+
+            function setSelectedItem(item) {
+                if (selectedItem !== item) {
+                    unsetSelectedItem();
+                    selectedItem = item;
+                }
+            }
+
             Rectangle {
                 anchors.fill: parent
                 color: "#F5F6F8"
@@ -309,6 +335,10 @@ CPage {
                 id:slideDelegate
                 width: attachementList.width
                 height:attachementList.height / 6
+
+                onSlideFinished: {
+                    attachementList.setSelectedItem(slideDelegate);
+                }
 
                 _rightMenuItem: Item {
                     width: 140
@@ -346,14 +376,10 @@ CPage {
 
                     anchors.margins: 1
 
-                    border {
-                        color: "#F3F4F6"
-                        width: 2
-                    }
                     z:-1
                 }
 
-                property Item textItem: Text{
+                property Item textItem: Text {
                     parent:slideDelegate.slideItem
                     anchors.verticalCenter: slideDelegate.slideItem.verticalCenter
                     anchors.left: slideDelegate.slideItem.left
@@ -375,6 +401,9 @@ CPage {
                         medoAttManager.play(model.modelData.path + "/" + model.modelData.name)
                     }
                     slideDelegate.realPressed = false
+
+                    slideDelegate.toInitState();
+                    attachementList.unsetSelectedItem();
 
                 }
             }

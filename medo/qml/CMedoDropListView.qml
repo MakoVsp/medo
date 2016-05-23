@@ -4,6 +4,24 @@ import QtQml.Models 2.1
 ListView {
     id: root
 
+    property var selectedItem: null
+
+    function unsetSelectedItem()
+    {
+        if (selectedItem) {
+            selectedItem.toInitState();
+            selectedItem = null;
+        }
+    }
+
+    function setSelectedItem(item) {
+        if (selectedItem !== item) {
+            console.debug("overhere")
+            unsetSelectedItem();
+            selectedItem = item;
+        }
+    }
+
     displaced: Transition {
         NumberAnimation { properties: "x,y"; easing.type: Easing.OutQuad }
     }
@@ -39,6 +57,13 @@ ListView {
                     rootPage.showEditPage("OPEN_EDIT", model.modelData.content,
                                           model.modelData.date, model.modelData.id,
                                           model.modelData.attachment,model.modelData.attachmentList)
+
+                    delegateRoot.toInitState();
+                    unsetSelectedItem();
+                }
+
+                onSlideFinished: {
+                    setSelectedItem(delegateRoot);
                 }
 
                 _rightMenuItem: Item {
@@ -82,13 +107,7 @@ ListView {
                     id: cellItem
                     parent:delegateRoot.slideItem
                     anchors.fill: delegateRoot.slideItem
-
                     anchors.margins: 1
-
-                    border {
-                        color: "#F3F4F6"
-                        width: 2
-                    }
 
                     color: "white"
                     //                    radius: 30

@@ -55,7 +55,6 @@ MouseArea{
                 delegateRoot.rightMenuTriggered();
             }
         }
-
     }
 
     /**
@@ -99,6 +98,8 @@ MouseArea{
     */
     signal leftMenuTriggered(int index)
     signal rightMenuTriggered()
+
+    signal slideFinished()
 
     property bool realPressed: false
 
@@ -158,6 +159,7 @@ MouseArea{
     }
     onReleased: {
         console.log("rererereressssssssssssssss")
+        slideFinished();
         privateData.releaseX = mouseX
         clearTouchState()
     }
